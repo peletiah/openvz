@@ -1,7 +1,7 @@
 #!/usr/bin/python2.4
 # Copyright (C) 2008 Christian Benke
 # Distributed under the terms of the GNU General Public License v2
-# v0.2 2008-04-04
+# v0.3 2008-11-24
 # Christian Benke <benkokakao  gmail  com>
 
 import string
