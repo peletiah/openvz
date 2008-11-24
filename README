@@ -1,0 +1,10 @@
+check_beancounter.py -- A nagios plugin to check changes in /proc/user_beancounters:
+	
+	check_beancounter.py : Check if failcounters increase or resource-values break barriers or limits 
+
+	 check_beancounter.py [-tfh]
+
+	 -h                  print this message
+ 
+	 -t 		     Check if failcnt-values have increased since the last run
+	 -f                  Check if current value of a resource is higher than barrier/limit
