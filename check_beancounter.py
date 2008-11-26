@@ -10,6 +10,7 @@ import sys
 import getopt
 import re
 from optparse import OptionParser
+import os
 
 veid=''
 current_data=dict()
@@ -154,7 +155,7 @@ def pickle_data(current_data,action,count,picklefilepath):
 				print 'DATA_READ IS NONE:' + str(data_read)
 				return data_read
 	except IOError:
-		current_data = compare_data(beancounter_data,'0',count)
+		current_data = compare_data(beancounter_data,'0',count, None)
 		picklefile=open(picklefilepath,'w')
 		pickle.dump(current_data,picklefile)
 		picklefile.close()
@@ -178,6 +179,7 @@ if __name__ == "__main__":
 
 	(options, args) = parser.parse_args()
 	count=options.count
+
 	try:
 		email=options.email[0]	
 	except TypeError:
@@ -185,8 +187,10 @@ if __name__ == "__main__":
 
 	if count == None:
 		parser.print_help()
+		os._exit(1)
 	elif count and email == None:
 		parser.print_help()
+		os._exit(1)
 	
 
 beancounter_data=open('/proc/user_beancounters','r')
