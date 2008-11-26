@@ -1,7 +1,7 @@
 #!/usr/bin/python2.4
 # Copyright (C) 2008 Christian Benke
 # Distributed under the terms of the GNU General Public License v2
-# v0.3 2008-11-24
+# v0.4 2008-11-26
 # Christian Benke <benkokakao  gmail  com>
 
 import string
@@ -9,12 +9,13 @@ import pickle
 import sys
 import getopt
 import re
+from optparse import OptionParser
 
 veid=''
 current_data=dict()
 opts=None
 beancounter_data=None
-picklefilepath='/var/lib/vz/check_beancounter_pickledump'
+picklefilepath='/tmp/check_beancounter_pickledump'
 
 #-------- find the hostname for each veid ---:
 
@@ -42,13 +43,13 @@ def get_hn_hostname():
 
 # ---------- send mail in case of a counter-change
 
-def send_mail(count_change):
+def send_mail(count_change,email):
 	sendmail = "/usr/lib/sendmail" # sendmail location
 	import os
 	hn_hostname=get_hn_hostname()
         p = os.popen("%s -t" % sendmail, "w")
 	p.write("From: root\n")
-        p.write("To: benkokakao@gmail.com\n")
+        p.write("To: %s\n" % email)
         p.write("Subject: Beancounters change " + str(hn_hostname) + "\n")
         p.write("\n") # blank line separating headers from body
         p.write("The Beancounter-failcnt value of the following veid(s) and resource(s) has \n")
@@ -91,7 +92,7 @@ def barriercheck(data_read,current_data,veid,fields,count,barrier_break):
 
 #------------ read user_beancounter and handle the result of the comparison subroutines
 
-def compare_data(beancounter_data,data_read,count):
+def compare_data(beancounter_data,data_read,count,email):
 	count_change=str()
 	barrier_break=str()
 	for line in beancounter_data:
@@ -124,7 +125,7 @@ def compare_data(beancounter_data,data_read,count):
 	        sys.exit(0)
 	
 	if count_change and count == True:
-		send_mail(count_change)
+		send_mail(count_change,email)
 		return current_data
 	elif count == True:
 		return current_data
@@ -160,33 +161,36 @@ def pickle_data(current_data,action,count,picklefilepath):
 
 # ------- print script usage
 
-def usage(prog="check_beancounter.py"):                                            
-    print """
-check_beancounter.py : Check if failcounters increase or resource-values break barriers or limits 
 
- check_beancounter.py [-tfh]
+if __name__ == "__main__":
+        parser = OptionParser()
+        #parser.add_option("-h", "--help", action="help")
+        parser.add_option("-i", action="store_true", dest="count",
+                help="Check if failcnt-values have increased since the last run and send mail if true, requires -e")
+        parser.add_option("-e", action="append", dest="email",
+                help="The email address of the warning recipient, required for -i")
+        parser.add_option("-c", action="store_false", dest="count",
+                help="Check if current value of a resource is higher than barrier/limit")
 
- -h                  print this message
- 
- -t 		     Check if failcnt-values have increased since the last run
- -f                  Check if current value of a resource is higher than barrier/limit
- """
 
 
-opts=getopt.getopt(sys.argv[1:], 'thf')
-if opts:
-	if opts[0]==[]:
-		usage(); sys.exit(0)
-	elif opts[0][0][0]=='-h':
-		usage(); sys.exit(0)
-	elif opts[0][0][0]=='-t':
-		count=True
-	elif opts[0][0][0]=='-f':
-		count=False
 
+
+	(options, args) = parser.parse_args()
+	count=options.count
+	try:
+		email=options.email[0]	
+	except TypeError:
+		email=options.email
+
+	if count == None:
+		parser.print_help()
+	elif count and email == None:
+		parser.print_help()
+	
 
 beancounter_data=open('/proc/user_beancounters','r')
 data_read=pickle_data(current_data,'read',count,picklefilepath)
-current_data = compare_data(beancounter_data,data_read,count)
+current_data = compare_data(beancounter_data,data_read,count,email)
 pickle_data(current_data,'write',count,picklefilepath)
 
