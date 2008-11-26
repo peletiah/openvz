@@ -14,7 +14,7 @@ veid=''
 current_data=dict()
 opts=None
 beancounter_data=None
-picklefilepath='/var/lib/openvz-custom/check_beancounter_pickledump'
+picklefilepath='/var/lib/vz/check_beancounter_pickledump'
 
 #-------- find the hostname for each veid ---:
 
@@ -48,7 +48,7 @@ def send_mail(count_change):
 	hn_hostname=get_hn_hostname()
         p = os.popen("%s -t" % sendmail, "w")
 	p.write("From: root\n")
-        p.write("To: root@company.com\n")
+        p.write("To: benkokakao@gmail.com\n")
         p.write("Subject: Beancounters change " + str(hn_hostname) + "\n")
         p.write("\n") # blank line separating headers from body
         p.write("The Beancounter-failcnt value of the following veid(s) and resource(s) has \n")
