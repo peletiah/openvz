@@ -4,8 +4,8 @@ Usage: check_beancounter.py [options]
 
 Options:
   -h, --help  show this help message and exit
-  -i          Check if failcnt-values have increased since the last run and
+  -i          Increase - Check if failcnt-values have increased since the last run and
               send mail if true, requires -e
   -e EMAIL    The email address of the warning recipient, required for -i
-  -c          Check if current value of a resource is higher than
+  -c          Current - Check if current value of a resource is higher than
               barrier/limit

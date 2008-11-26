@@ -167,11 +167,11 @@ if __name__ == "__main__":
         parser = OptionParser()
         #parser.add_option("-h", "--help", action="help")
         parser.add_option("-i", action="store_true", dest="count",
-                help="Check if failcnt-values have increased since the last run and send mail if true, requires -e")
+                help="Increase - Check if failcnt-values have increased since the last run and send mail if true, requires -e")
         parser.add_option("-e", action="append", dest="email",
                 help="The email address of the warning recipient, required for -i")
         parser.add_option("-c", action="store_false", dest="count",
-                help="Check if current value of a resource is higher than barrier/limit")
+                help="Current - Check if current value of a resource is higher than barrier/limit")
 
 
 
