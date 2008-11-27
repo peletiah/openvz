@@ -1,11 +1,12 @@
-check_beancounter.py -- A nagios plugin to check changes in /proc/user_beancounters:
+check_beancounter.py -- Monitoring changes in /proc/user_beancounters. Can be used as a nagios plugin(to check current
+values) or as a standalone script that monitors changes since the last run and warns if true:
 	
 Usage: check_beancounter.py [options]
 
 Options:
   -h, --help  show this help message and exit
   -i          Increase - Check if failcnt-values have increased since the last run and
-              send mail if true, requires -e
+              send mail if true(Standalone mode), requires -e
   -e EMAIL    The email address of the warning recipient, required for -i
   -c          Current - Check if current value of a resource is higher than
-              barrier/limit
+              barrier/limit(Nagios mode)
