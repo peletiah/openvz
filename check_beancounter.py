@@ -1,4 +1,4 @@
-#!/usr/bin/python2.4
+#!/usr/bin/python
 # Copyright (C) 2008 Christian Benke
 # Distributed under the terms of the GNU General Public License v2
 # v0.4 2008-11-26
